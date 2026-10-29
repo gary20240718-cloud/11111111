@@ -60,10 +60,10 @@ end
 
 -- 懸浮球
 local FloatBtn = Instance.new("TextButton")
-FloatBtn.Size = UDim2.new(0, 100, 0, 35) 
+FloatBtn.Size = UDim2.new(0, 160, 0, 40)
 FloatBtn.Position = UDim2.new(0.05, 0, 0.4, 0)
 FloatBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
-FloatBtn.Text = "jiaNBB"
+FloatBtn.Text = "t.me/jiaNBB666"
 FloatBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 FloatBtn.TextSize = 14
 FloatBtn.Font = Enum.Font.FredokaOne
@@ -75,8 +75,8 @@ makeDraggable(FloatBtn, FloatBtn)
 
 -- 主面板
 local Main = Instance.new("Frame")
-Main.Size = UDim2.new(0, 200, 0, 380)
-Main.Position = UDim2.new(0.5, -100, 0.5, -190)
+Main.Size = UDim2.new(0, 200, 0, 260)
+Main.Position = UDim2.new(0.5, -100, 0.5, -130)
 Main.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 Main.BorderColor3 = Color3.fromRGB(0, 255, 255)
 Main.BorderSizePixel = 2
@@ -86,15 +86,15 @@ Main.Parent = ScreenGui
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 25)
 Title.BackgroundColor3 = Color3.fromRGB(0, 100, 100)
-Title.Text = "🎯 Rivals 終極輔助 (暴風版)"
+Title.Text = "t.me/jiaNBB666"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 14
 Title.Parent = Main
 makeDraggable(Main, Title)
 
 local ESPBtn = Instance.new("TextButton")
-ESPBtn.Size = UDim2.new(0.9, 0, 0, 30)
-ESPBtn.Position = UDim2.new(0.05, 0, 0, 30)
+ESPBtn.Size = UDim2.new(0.9, 0, 0, 35)
+ESPBtn.Position = UDim2.new(0.05, 0, 0, 35)
 ESPBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 ESPBtn.Text = "透視 (350m內): 關閉"
 ESPBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -103,8 +103,8 @@ ESPBtn.ZIndex = 2
 ESPBtn.Parent = Main
 
 local FlyBtn = Instance.new("TextButton")
-FlyBtn.Size = UDim2.new(0.9, 0, 0, 30)
-FlyBtn.Position = UDim2.new(0.05, 0, 0, 65)
+FlyBtn.Size = UDim2.new(0.9, 0, 0, 35)
+FlyBtn.Position = UDim2.new(0.05, 0, 0, 80)
 FlyBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 FlyBtn.Text = "飛天 (穿牆): 關閉"
 FlyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -113,79 +113,24 @@ FlyBtn.ZIndex = 2
 FlyBtn.Parent = Main
 
 local TPBtn = Instance.new("TextButton")
-TPBtn.Size = UDim2.new(0.9, 0, 0, 30)
-TPBtn.Position = UDim2.new(0.05, 0, 0, 100)
+TPBtn.Size = UDim2.new(0.9, 0, 0, 35)
+TPBtn.Position = UDim2.new(0.05, 0, 0, 125)
 TPBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-TPBtn.Text = "瞬移敵人身邊: 關閉"
+TPBtn.Text = "瞬移敵人身邊 (穿牆): 關閉"
 TPBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 TPBtn.TextSize = 12
 TPBtn.ZIndex = 2
 TPBtn.Parent = Main
 
-local GodBtn = Instance.new("TextButton")
-GodBtn.Size = UDim2.new(0.9, 0, 0, 30)
-GodBtn.Position = UDim2.new(0.05, 0, 0, 135)
-GodBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-GodBtn.Text = "人物無敵: 關閉"
-GodBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-GodBtn.TextSize = 12
-GodBtn.ZIndex = 2
-GodBtn.Parent = Main
-
-local InvisBtn = Instance.new("TextButton")
-InvisBtn.Size = UDim2.new(0.9, 0, 0, 30)
-InvisBtn.Position = UDim2.new(0.05, 0, 0, 170)
-InvisBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-InvisBtn.Text = "完全隱形 (含武器): 關閉"
-InvisBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-InvisBtn.TextSize = 12
-InvisBtn.ZIndex = 2
-InvisBtn.Parent = Main
-
-local FastFireBtn = Instance.new("TextButton")
-FastFireBtn.Size = UDim2.new(0.9, 0, 0, 30)
-FastFireBtn.Position = UDim2.new(0.05, 0, 0, 205)
-FastFireBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-FastFireBtn.Text = "加速開槍: 關閉"
-FastFireBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-FastFireBtn.TextSize = 12
-FastFireBtn.ZIndex = 2
-FastFireBtn.Parent = Main
-
--- 💥 暴風判定按鈕
-local HitboxBtn = Instance.new("TextButton")
-HitboxBtn.Size = UDim2.new(0.9, 0, 0, 30)
-HitboxBtn.Position = UDim2.new(0.05, 0, 0, 240)
-HitboxBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-HitboxBtn.Text = "必中判定 (子彈吸附): 關閉"
-HitboxBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-HitboxBtn.TextSize = 12
-HitboxBtn.ZIndex = 2
-HitboxBtn.Parent = Main
-
-local BoxSizeLabel = Instance.new("TextLabel")
-BoxSizeLabel.Size = UDim2.new(0.9, 0, 0, 15)
-BoxSizeLabel.Position = UDim2.new(0.05, 0, 0, 280)
-BoxSizeLabel.BackgroundTransparency = 1
-BoxSizeLabel.Text = "判定範圍大小 (FOV): 100"
-BoxSizeLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
-BoxSizeLabel.TextSize = 12
-BoxSizeLabel.ZIndex = 2
-BoxSizeLabel.Parent = Main
-
-local BoxSliderBG = Instance.new("Frame")
-BoxSliderBG.Size = UDim2.new(0.9, 0, 0, 10)
-BoxSliderBG.Position = UDim2.new(0.05, 0, 0, 300)
-BoxSliderBG.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-BoxSliderBG.Active = true
-BoxSliderBG.ZIndex = 2
-BoxSliderBG.Parent = Main
-
-local BoxSliderFill = Instance.new("Frame")
-BoxSliderFill.Size = UDim2.new(0.25, 0, 0, 10)
-BoxSliderFill.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
-BoxSliderFill.ZIndex = 2
-BoxSliderFill.Parent = BoxSliderBG
+local SpinBtn = Instance.new("TextButton")
+SpinBtn.Size = UDim2.new(0.9, 0, 0, 35)
+SpinBtn.Position = UDim2.new(0.05, 0, 0, 170)
+SpinBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+SpinBtn.Text = "人物旋轉 (Spinbot): 關閉"
+SpinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpinBtn.TextSize = 12
+SpinBtn.ZIndex = 2
+SpinBtn.Parent = Main
 
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Size = UDim2.new(0, 20, 0, 20)
@@ -233,35 +178,9 @@ Instance.new("UICorner", DownBtn).CornerRadius = UDim.new(1, 0)
 local espEnabled = false
 local flyEnabled = false
 local followEnabled = false
-local godEnabled = false
-local invisEnabled = false
-local fastFireEnabled = false
-local hitboxEnabled = false
+local spinEnabled = false
 local isGoingUp = false
 local isGoingDown = false
-local fovSize = 100
--- 拉條控制
-local draggingSlider = false
-BoxSliderBG.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        draggingSlider = true
-    end
-end)
-UserInputService.InputChanged:Connect(function(input)
-    if draggingSlider and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        local mouse = UserInputService:GetMouseLocation()
-        local percent = math.clamp((mouse.X - BoxSliderBG.AbsolutePosition.X) / BoxSliderBG.AbsoluteSize.X, 0.05, 1)
-        BoxSliderFill.Size = UDim2.new(percent, 0, 0, 10)
-        fovSize = math.floor(50 + (500 - 50) * percent)
-        BoxSizeLabel.Text = "判定範圍大小 (FOV): " .. fovSize
-    end
-end)
-UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        draggingSlider = false
-    end
-end)
-
 -- 觸控判定
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not flyEnabled then return end
@@ -354,103 +273,14 @@ end)
 
 TPBtn.MouseButton1Click:Connect(function()
     followEnabled = not followEnabled
-    TPBtn.Text = "瞬移敵人身邊: " .. (followEnabled and "開啟" or "關閉")
+    TPBtn.Text = "瞬移敵人身邊 (穿牆): " .. (followEnabled and "開啟" or "關閉")
     TPBtn.BackgroundColor3 = followEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
 end)
 
-GodBtn.MouseButton1Click:Connect(function()
-    godEnabled = not godEnabled
-    GodBtn.Text = "人物無敵: " .. (godEnabled and "開啟" or "關閉")
-    GodBtn.BackgroundColor3 = godEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
-
-    local char = LocalPlayer.Character
-    if char and char:FindFirstChild("Humanoid") then
-        local humanoid = char.Humanoid
-        if godEnabled then
-            humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
-            humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
-            humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
-        else
-            humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
-            humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, true)
-            humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, true)
-        end
-    end
-end)
-
-InvisBtn.MouseButton1Click:Connect(function()
-    invisEnabled = not invisEnabled
-    InvisBtn.Text = "完全隱形 (含武器): " .. (invisEnabled and "開啟" or "關閉")
-    InvisBtn.BackgroundColor3 = invisEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
-end)
-
-FastFireBtn.MouseButton1Click:Connect(function()
-    fastFireEnabled = not fastFireEnabled
-    FastFireBtn.Text = "加速開槍: " .. (fastFireEnabled and "開啟" or "關閉")
-    FastFireBtn.BackgroundColor3 = fastFireEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
-end)
-
-HitboxBtn.MouseButton1Click:Connect(function()
-    hitboxEnabled = not hitboxEnabled
-    HitboxBtn.Text = "必中判定 (子彈吸附): " .. (hitboxEnabled and "開啟" or "關閉")
-    HitboxBtn.BackgroundColor3 = hitboxEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
-end)
-
--- 加速開槍與必中判定底層攔截
-pcall(function()
-    local mt = getrawmetatable(game)
-    local oldNamecall = mt.__namecall
-    setreadonly(mt, false)
-
-    mt.__namecall = newcclosure(function(self, ...)
-        local method = getnamecallmethod()
-        local args = {...}
-
-        -- 加速開槍
-        if fastFireEnabled then
-            if method == "Wait" or method == "wait" then
-                if args[1] and type(args[1]) == "number" and args[1] > 0.05 then
-                    args[1] = 0.05
-                end
-            end
-        end
-
-        -- 必中判定 (攔截射線)
-        if hitboxEnabled and (method == "Raycast" or method == "FindPartOnRay" or method == "FindPartOnRayWithIgnoreList") then
-            local closestTarget = nil
-            local shortestDistance = fovSize
-            
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= LocalPlayer and player.Character then
-                    local head = player.Character:FindFirstChild("Head")
-                    local humanoid = player.Character:FindFirstChild("Humanoid")
-                    
-                    if head and humanoid and humanoid.Health > 0 then
-                        local screenPos, onScreen = Camera:WorldToViewportPoint(head.Position)
-                        if onScreen and screenPos.Z > 0 then
-                            local screenCenter = Camera.ViewportSize / 2
-                            local distToCenter = (Vector2.new(screenPos.X, screenPos.Y) - screenCenter).Magnitude
-                            if distToCenter < shortestDistance then
-                                shortestDistance = distToCenter
-                                closestTarget = head
-                            end
-                        end
-                    end
-                end
-            end
-
-            if closestTarget then
-                if method == "Raycast" then
-                    local origin = args[1]
-                    local direction = args[2]
-                    args[2] = (closestTarget.Position - origin).Unit * direction.Magnitude
-                end
-            end
-        end
-
-        return oldNamecall(self, unpack(args))
-    end)
-    setreadonly(mt, true)
+SpinBtn.MouseButton1Click:Connect(function()
+    spinEnabled = not spinEnabled
+    SpinBtn.Text = "人物旋轉 (Spinbot): " .. (spinEnabled and "開啟" or "關閉")
+    SpinBtn.BackgroundColor3 = spinEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
 end)
 
 -- ==========================================
@@ -462,49 +292,15 @@ RunService.RenderStepped:Connect(function()
     local hrp = char:FindFirstChild("HumanoidRootPart")
     local humanoid = char:FindFirstChild("Humanoid")
 
-    -- 隱形 (含武器)
-    if invisEnabled and char then
-        for _, part in pairs(char:GetDescendants()) do
-            if part:IsA("BasePart") then
-                part.LocalTransparencyModifier = 0 
-                part.Transparency = 1 
-            elseif part:IsA("Decal") or part:IsA("Texture") then
-                part.Transparency = 1
-            end
-        end
-        for _, acc in pairs(char:GetChildren()) do
-            if acc:IsA("Accessory") and acc:FindFirstChild("Handle") then
-                acc.Handle.Transparency = 1
-            end
-        end
-        local backpack = LocalPlayer:FindFirstChild("Backpack")
-        if backpack then
-            for _, tool in pairs(backpack:GetChildren()) do
-                if tool:IsA("Tool") then
-                    for _, part in pairs(tool:GetDescendants()) do
-                        if part:IsA("BasePart") then part.Transparency = 1 end
-                    end
-                end
-            end
-        end
-        for _, tool in pairs(char:GetChildren()) do
-            if tool:IsA("Tool") then
-                for _, part in pairs(tool:GetDescendants()) do
-                    if part:IsA("BasePart") then part.Transparency = 1 end
-                end
-            end
-        end
+    -- 人物旋轉 (Spinbot)
+    if spinEnabled and hrp then
+        hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(30), 0)
     end
 
-    -- 防掉圖與無敵
-    if humanoid then
-        if godEnabled or flyEnabled then
-            if humanoid.Health < humanoid.MaxHealth then
-                humanoid.Health = humanoid.MaxHealth
-            end
-            if hrp and hrp.Position.Y < -50 then
-                hrp.CFrame = CFrame.new(hrp.Position.X, 50, hrp.Position.Z)
-            end
+    -- 防掉圖
+    if flyEnabled and hrp then
+        if hrp.Position.Y < -50 then
+            hrp.CFrame = CFrame.new(hrp.Position.X, 50, hrp.Position.Z)
         end
     end
 
@@ -600,7 +396,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- 瞬移敵人身邊
+    -- 瞬移敵人身邊 (穿牆)
     if followEnabled and hrp then
         if #enemies > 0 and #enemies <= 5 then
             local closestRoot = nil
@@ -623,9 +419,14 @@ RunService.RenderStepped:Connect(function()
                     bv.MaxForce = Vector3.new(1e5, 1e5, 1e5)
                     bv.Parent = hrp
                 end
+                
+                for _, part in pairs(char:GetDescendants()) do
+                    if part:IsA("BasePart") then part.CanCollide = false end
+                end
+                
                 local direction = (closestRoot.Position - hrp.Position)
                 direction = Vector3.new(direction.X, 0, direction.Z).Unit
-                local targetVel = (direction * 150) + Vector3.new(0, 2, 0)
+                local targetVel = (direction * 200) + Vector3.new(0, 2, 0)
                 bv.Velocity = targetVel
             else
                 if hrp:FindFirstChild("FollowVelocity") then hrp.FollowVelocity:Destroy() end
@@ -644,15 +445,12 @@ LocalPlayer.CharacterAdded:Connect(function()
     local char = LocalPlayer.Character
     if char then
         local humanoid = char:FindFirstChild("Humanoid")
-        if godEnabled or flyEnabled then
+        if flyEnabled then
             if humanoid then
                 humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
                 humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
                 humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
             end
-        end
-        
-        if flyEnabled then
             local hrp = char:FindFirstChild("HumanoidRootPart")
             if hrp and humanoid then
                 humanoid.PlatformStand = true
