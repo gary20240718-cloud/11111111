@@ -7,6 +7,7 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "RivalsHackUI"
 ScreenGui.Parent = game.CoreGui
 ScreenGui.DisplayOrder = 999
+ScreenGui.IgnoreGuiInset = true
 
 local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = game:GetService("Players").LocalPlayer
@@ -39,8 +40,8 @@ end
 
 -- 主面板
 local Main = Instance.new("Frame")
-Main.Size = UDim2.new(0, 220, 0, 420)
-Main.Position = UDim2.new(0.5, -110, 0.5, -210)
+Main.Size = UDim2.new(0, 220, 0, 350)
+Main.Position = UDim2.new(0.5, -110, 0.5, -175)
 Main.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 Main.BorderColor3 = Color3.fromRGB(0, 255, 255)
 Main.BorderSizePixel = 2
@@ -73,13 +74,11 @@ end
 local ESPBtn = createBtn("全身透視+血條: 關閉", 40)
 local FlyBtn = createBtn("飛天 (穿牆): 關閉", 85)
 local TPBtn = createBtn("貼臉瞬移: 關閉", 130)
-local SpinBtn = createBtn("狂風旋轉: 關閉", 175)
-local AimbotBtn = createBtn("視覺自瞄: 關閉", 220)
 
 -- 瞬移高度拉條
 local HeightLabel = Instance.new("TextLabel")
 HeightLabel.Size = UDim2.new(0.9, 0, 0, 15)
-HeightLabel.Position = UDim2.new(0.05, 0, 0, 265)
+HeightLabel.Position = UDim2.new(0.05, 0, 0, 175)
 HeightLabel.BackgroundTransparency = 1
 HeightLabel.Text = "瞬移高度偏移: 0"
 HeightLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -88,7 +87,7 @@ HeightLabel.Parent = Main
 
 local HeightSliderBG = Instance.new("Frame")
 HeightSliderBG.Size = UDim2.new(0.9, 0, 0, 10)
-HeightSliderBG.Position = UDim2.new(0.05, 0, 0, 285)
+HeightSliderBG.Position = UDim2.new(0.05, 0, 0, 195)
 HeightSliderBG.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 HeightSliderBG.Active = true
 HeightSliderBG.Parent = Main
@@ -158,8 +157,6 @@ Instance.new("UICorner", DownBtn).CornerRadius = UDim.new(1, 0)
 local espEnabled = false
 local flyEnabled = false
 local followEnabled = false
-local spinEnabled = false
-local aimbotEnabled = false
 local isGoingUp = false
 local isGoingDown = false
 local heightOffset = 0
@@ -175,7 +172,7 @@ UserInputService.InputChanged:Connect(function(input)
         local mouse = UserInputService:GetMouseLocation()
         local percent = math.clamp((mouse.X - HeightSliderBG.AbsolutePosition.X) / HeightSliderBG.AbsoluteSize.X, 0, 1)
         HeightSliderFill.Size = UDim2.new(percent, 0, 0, 10)
-        heightOffset = math.floor(-5 + (15 - (-5)) * percent) -- 範圍 -5 到 15
+        heightOffset = math.floor(-5 + (15 - (-5)) * percent)
         HeightLabel.Text = "瞬移高度偏移: " .. heightOffset
     end
 end)
@@ -221,7 +218,7 @@ FlyBtn.MouseButton1Click:Connect(function()
     FlyBtn.BackgroundColor3 = flyEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
     UpBtn.Visible = flyEnabled
     DownBtn.Visible = flyEnabled
-    
+
     if flyEnabled then
         followEnabled = false
         TPBtn.Text = "貼臉瞬移: 關閉"
@@ -261,7 +258,7 @@ TPBtn.MouseButton1Click:Connect(function()
     followEnabled = not followEnabled
     TPBtn.Text = "貼臉瞬移: " .. (followEnabled and "開啟" or "關閉")
     TPBtn.BackgroundColor3 = followEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
-    
+
     if followEnabled then
         flyEnabled = false
         FlyBtn.Text = "飛天 (穿牆): 關閉"
@@ -276,76 +273,8 @@ TPBtn.MouseButton1Click:Connect(function()
     end
 end)
 
-SpinBtn.MouseButton1Click:Connect(function()
-    spinEnabled = not spinEnabled
-    SpinBtn.Text = "狂風旋轉: " .. (spinEnabled and "開啟" or "關閉")
-    SpinBtn.BackgroundColor3 = spinEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
-end)
-
-AimbotBtn.MouseButton1Click:Connect(function()
-    aimbotEnabled = not aimbotEnabled
-    AimbotBtn.Text = "視覺自瞄: " .. (aimbotEnabled and "開啟" or "關閉")
-    AimbotBtn.BackgroundColor3 = aimbotEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
-end)
-
--- 底層攔截：視覺自瞄 (開槍時槍口對準，不影響鏡頭)
-pcall(function()
-    local mt = getrawmetatable(game)
-    local oldNamecall = mt.__namecall
-    setreadonly(mt, false)
-
-    mt.__namecall = newcclosure(function(self, ...)
-        local method = getnamecallmethod()
-        local args = {...}
-
-        if aimbotEnabled and (method == "Raycast" or method == "FindPartOnRay") then
-            local closestTarget = nil
-            local shortestDist = math.huge
-
-            for _, p in pairs(Players:GetPlayers()) do
-                if p ~= LocalPlayer and p.Character and not p:IsTeammate(LocalPlayer) then
-                    local head = p.Character:FindFirstChild("Head")
-                    local hum = p.Character:FindFirstChildOfClass("Humanoid")
-                    if head and hum and hum.Health > 0 then
-                        -- 檢查敵人的頭部是否在螢幕上，並且沒有被牆擋住（視覺可見）
-                        local screenPos, onScreen = Camera:WorldToViewportPoint(head.Position)
-                        if onScreen and screenPos.Z > 0 then
-                            -- Raycast 檢查視線
-                            local rayParams = RaycastParams.new()
-                            rayParams.FilterDescendantsInstances = {LocalPlayer.Character, p.Character}
-                            rayParams.FilterType = Enum.RaycastFilterType.Exclude
-                            local rayDir = (head.Position - Camera.CFrame.Position).Unit * 1000
-                            local rayHit = workspace:Raycast(Camera.CFrame.Position, rayDir, rayParams)
-                            
-                            -- 如果射線沒有打到東西，代表看得到他
-                            if not rayHit then
-                                local dist = (Camera.CFrame.Position - head.Position).Magnitude
-                                if dist < shortestDist then
-                                    shortestDist = dist
-                                    closestTarget = head
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-
-            -- 將子彈終點改為目標頭部
-            if closestTarget then
-                if method == "Raycast" then
-                    local origin = args[1]
-                    local direction = args[2]
-                    args[2] = (closestTarget.Position - origin).Unit * direction.Magnitude
-                end
-            end
-        end
-        return oldNamecall(self, unpack(args))
-    end)
-    setreadonly(mt, true)
-end)
-
 -- ==========================================
--- 3. 即時運算迴圈 (旋轉、透視、瞬移)
+-- 3. 即時運算迴圈
 -- ==========================================
 RunService.RenderStepped:Connect(function()
     local char = LocalPlayer.Character
@@ -353,13 +282,6 @@ RunService.RenderStepped:Connect(function()
     local hrp = char:FindFirstChild("HumanoidRootPart")
     local humanoid = char:FindFirstChild("Humanoid")
 
-    -- 旋轉 (不影響相機與子彈)
-    if spinEnabled and hrp then
-        -- 旋轉角色，但紀錄原本的面向，避免子彈打歪
-        hrp.CFrame = hrp.CFrame * CFrame.Angles(0, math.rad(20), 0)
-    end
-
-    -- 飛天控制
     if flyEnabled and hrp and humanoid then
         local bv = hrp:FindFirstChild("HackFly")
         if bv then
@@ -374,7 +296,6 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- 透視收集與繪製
     local activePlayers = {}
     local enemies = {}
 
@@ -396,8 +317,7 @@ RunService.RenderStepped:Connect(function()
                         local health = math.floor(pHumanoid.Health)
                         local maxHealth = math.floor(pHumanoid.MaxHealth)
                         local headPos, onScreen = Camera:WorldToViewportPoint(pHead.Position + Vector3.new(0, 0.5, 0))
-                        local rootPos = Camera:WorldToViewportPoint(pRoot.Position - Vector3.new(0, 2.5, 0))
-
+                        
                         if onScreen then
                             local boxName = "ESP_Box_" .. player.UserId
                             local box = ScreenGui:FindFirstChild(boxName)
@@ -405,22 +325,15 @@ RunService.RenderStepped:Connect(function()
                                 box = Instance.new("Frame")
                                 box.Name = boxName
                                 box.BackgroundTransparency = 1
-                                box.BorderSizePixel = 1
+                                box.BorderSizePixel = 2
                                 box.BorderColor3 = Color3.fromRGB(255, 0, 0)
+                                box.ZIndex = 100 
                                 box.Parent = ScreenGui
                             end
-                            
-                            -- 繪製全身框
-                            local height = math.abs(headPos.Y - rootPos.Y)
-                            local width = height / 2
-                            if height < 30 then height = 30 end
-                            if width < 15 then width = 15 end
-                            
                             box.Visible = true
-                            box.Size = UDim2.new(0, width, 0, height) 
-                            box.Position = UDim2.new(0, headPos.X - (width/2), 0, headPos.Y)
+                            box.Size = UDim2.new(0, 45, 0, 65) 
+                            box.Position = UDim2.new(0, headPos.X - 22.5, 0, headPos.Y - 10)
 
-                            -- 繪製文字
                             local tagName = "ESP_Tag_" .. player.UserId
                             local textTag = ScreenGui:FindFirstChild(tagName)
                             if not textTag then
@@ -432,36 +345,36 @@ RunService.RenderStepped:Connect(function()
                                 textTag.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
                                 textTag.Font = Enum.Font.SourceSansBold
                                 textTag.TextSize = 14
+                                textTag.Size = UDim2.new(0, 150, 0, 50)
+                                textTag.ZIndex = 100
                                 textTag.Parent = ScreenGui
                             end
-                            
                             textTag.Visible = true
-                            -- 增強文字可見度
                             textTag.Text = player.Name .. "\nHP: " .. health .. "/" .. maxHealth .. "\n[" .. dist .. "m]"
-                            textTag.Position = UDim2.new(0, headPos.X - 60, 0, headPos.Y - 45)
+                            textTag.Position = UDim2.new(0, headPos.X - 75, 0, headPos.Y - 60)
                             
-                            -- 繪製血條
                             local barName = "ESP_Bar_" .. player.UserId
                             local bar = ScreenGui:FindFirstChild(barName)
                             if not bar then
                                 bar = Instance.new("Frame")
                                 bar.Name = barName
                                 bar.BorderSizePixel = 0
+                                bar.ZIndex = 100
                                 bar.Parent = ScreenGui
                                 local barFill = Instance.new("Frame")
                                 barFill.Name = "Fill"
                                 barFill.Size = UDim2.new(1, 0, 1, 0)
+                                barFill.ZIndex = 101
                                 barFill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
                                 barFill.Parent = bar
                             end
                             bar.Visible = true
-                            bar.Size = UDim2.new(0, 40, 0, 5)
-                            bar.Position = UDim2.new(0, headPos.X - 20, 0, headPos.Y - 10)
+                            bar.Size = UDim2.new(0, 45, 0, 5)
+                            bar.Position = UDim2.new(0, headPos.X - 22.5, 0, headPos.Y - 15)
                             bar.Fill.Size = UDim2.new(health/maxHealth, 0, 1, 0)
                             if health/maxHealth > 0.5 then bar.Fill.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
                             elseif health/maxHealth > 0.2 then bar.Fill.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
                             else bar.Fill.BackgroundColor3 = Color3.fromRGB(255, 0, 0) end
-                            
                         else
                             local box = ScreenGui:FindFirstChild("ESP_Box_" .. player.UserId)
                             if box then box.Visible = false end
@@ -476,7 +389,6 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- 清理死人或退出的
     if espEnabled then
         for _, obj in pairs(ScreenGui:GetChildren()) do
             if obj.Name:match("ESP_") then
@@ -487,9 +399,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- 瞬移 (貼臉、防虛空、排除隊友)
     if followEnabled and hrp then
-        -- 強制無碰撞防止卡牆
         for _, part in pairs(char:GetDescendants()) do
             if part:IsA("BasePart") then part.CanCollide = false end
         end
@@ -509,7 +419,6 @@ RunService.RenderStepped:Connect(function()
 
             if closestRoot then
                 local targetPos = closestRoot.Position + Vector3.new(0, heightOffset, 0)
-                -- 確保不會掉到地板下
                 if targetPos.Y > -20 then
                     hrp.CFrame = CFrame.new(targetPos)
                 end
@@ -519,15 +428,30 @@ RunService.RenderStepped:Connect(function()
 end)
 
 -- ==========================================
--- 4. 重生與對局重置
+-- 4. 重生機制 (保留開啟狀態)
 -- ==========================================
 LocalPlayer.CharacterAdded:Connect(function()
-    -- 對局結束、角色死亡重生時，強制關閉所有功能
-    flyEnabled = false; FlyBtn.Text = "飛天 (穿牆): 關閉"; FlyBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    followEnabled = false; TPBtn.Text = "貼臉瞬移: 關閉"; TPBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    spinEnabled = false; SpinBtn.Text = "狂風旋轉: 關閉"; SpinBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    aimbotEnabled = false; AimbotBtn.Text = "視覺自瞄: 關閉"; AimbotBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    isGoingUp = false; isGoingDown = false
-    
-    UpBtn.Visible = false; DownBtn.Visible = false
+    task.wait(1)
+    local char = LocalPlayer.Character
+    if char then
+        local humanoid = char:FindFirstChild("Humanoid")
+        
+        if flyEnabled and humanoid then
+            humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+            humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+            humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                humanoid.PlatformStand = true
+                for _, part in pairs(char:GetDescendants()) do
+                    if part:IsA("BasePart") then part.CanCollide = false end
+                end
+                local bv = Instance.new("BodyVelocity")
+                bv.Name = "HackFly"
+                bv.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+                bv.Velocity = Vector3.new(0, 0, 0)
+                bv.Parent = hrp
+            end
+        end
+    end
 end)
