@@ -1,20 +1,23 @@
 -- ==========================================
--- 1. 建立 UI 介面
+-- 1. 建立 UI 介面 (確保顯示)
 -- ==========================================
-if game.CoreGui:FindFirstChild("RivalsHackUI") then game.CoreGui.RivalsHackUI:Destroy() end
+local Player = game:GetService("Players").LocalPlayer
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local Camera = workspace.CurrentCamera
+
+if game.CoreGui:FindFirstChild("RivalsHackUI") then
+    game.CoreGui.RivalsHackUI:Destroy()
+end
 
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "RivalsHackUI"
 ScreenGui.Parent = game.CoreGui
 ScreenGui.DisplayOrder = 999
-ScreenGui.IgnoreGuiInset = true
+ScreenGui.ResetOnSpawn = false -- 防止重生後 UI 消失
 
-local UserInputService = game:GetService("UserInputService")
-local LocalPlayer = game:GetService("Players").LocalPlayer
-local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-local Camera = workspace.CurrentCamera
-
+-- 拖曳功能
 local function makeDraggable(frame, dragPart)
     local dragging, dragInput, dragStart, startPos
     dragPart.InputBegan:Connect(function(input)
@@ -225,7 +228,7 @@ FlyBtn.MouseButton1Click:Connect(function()
         TPBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
     end
 
-    local char = LocalPlayer.Character
+    local char = Player.Character
     if not char then return end
     local hrp = char:FindFirstChild("HumanoidRootPart")
     local humanoid = char:FindFirstChild("Humanoid")
@@ -265,7 +268,7 @@ TPBtn.MouseButton1Click:Connect(function()
         FlyBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
         UpBtn.Visible = false
         DownBtn.Visible = false
-        local char = LocalPlayer.Character
+        local char = Player.Character
         if char and char:FindFirstChild("HumanoidRootPart") and char.HumanoidRootPart:FindFirstChild("HackFly") then
             char.HumanoidRootPart.HackFly:Destroy()
             char.Humanoid.PlatformStand = false
@@ -277,7 +280,7 @@ end)
 -- 3. 即時運算迴圈
 -- ==========================================
 RunService.RenderStepped:Connect(function()
-    local char = LocalPlayer.Character
+    local char = Player.Character
     if not char then return end
     local hrp = char:FindFirstChild("HumanoidRootPart")
     local humanoid = char:FindFirstChild("Humanoid")
@@ -296,12 +299,11 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- 最原始、最精準的透視系統
     local activePlayers = {}
     local enemies = {}
 
     for _, player in pairs(Players:GetPlayers()) do
-        if player ~= LocalPlayer and player.Character and not player:IsTeammate(LocalPlayer) then
+        if player ~= Player and player.Character and not player:IsTeammate(Player) then
             local pChar = player.Character
             local pHumanoid = pChar:FindFirstChildOfClass("Humanoid")
             local pHead = pChar:FindFirstChild("Head")
@@ -318,12 +320,10 @@ RunService.RenderStepped:Connect(function()
                         local health = math.floor(pHumanoid.Health)
                         local maxHealth = math.floor(pHumanoid.MaxHealth)
                         
-                        -- 最原始的抓取方式：抓頭部與腳部
                         local headPos, headOnScreen = Camera:WorldToViewportPoint(pHead.Position + Vector3.new(0, 0.5, 0))
                         local feetPos, feetOnScreen = Camera:WorldToViewportPoint(pRoot.Position - Vector3.new(0, 2.5, 0))
                         
                         if headOnScreen and feetOnScreen then
-                            -- 計算最精準的全身高度與寬度
                             local height = math.abs(headPos.Y - feetPos.Y)
                             local width = height / 2
                             if height < 20 then height = 20 end
@@ -437,14 +437,13 @@ RunService.RenderStepped:Connect(function()
 end)
 
 -- ==========================================
--- 4. 重生機制 (保留開啟狀態)
+-- 4. 重生機制
 -- ==========================================
-LocalPlayer.CharacterAdded:Connect(function()
+Player.CharacterAdded:Connect(function()
     task.wait(1)
-    local char = LocalPlayer.Character
+    local char = Player.Character
     if char then
         local humanoid = char:FindFirstChild("Humanoid")
-        
         if flyEnabled and humanoid then
             humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
             humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
@@ -463,4 +462,4 @@ LocalPlayer.CharacterAdded:Connect(function()
             end
         end
     end
-end)＝
+end)
