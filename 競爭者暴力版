@@ -506,4 +506,24 @@ LocalPlayer.CharacterAdded:Connect(function()
         if godEnabled or flyEnabled then
             if humanoid then
                 humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
-                humanoid:SetStateEnabled(Enum.Hu
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+                humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+            end
+        end
+        
+        if flyEnabled then
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+            if hrp and humanoid then
+                humanoid.PlatformStand = true
+                for _, part in pairs(char:GetDescendants()) do
+                    if part:IsA("BasePart") then part.CanCollide = false end
+                end
+                local bv = Instance.new("BodyVelocity")
+                bv.Name = "HackFly"
+                bv.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+                bv.Velocity = Vector3.new(0, 0, 0)
+                bv.Parent = hrp
+            end
+        end
+    end
+end)
