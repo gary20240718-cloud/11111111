@@ -54,8 +54,8 @@ makeDraggable(FloatBtn, FloatBtn)
 
 -- 主面板
 local Main = Instance.new("Frame")
-Main.Size = UDim2.new(0, 200, 0, 260)
-Main.Position = UDim2.new(0.5, -100, 0.5, -130)
+Main.Size = UDim2.new(0, 200, 0, 350)
+Main.Position = UDim2.new(0.5, -100, 0.5, -175)
 Main.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 Main.BorderColor3 = Color3.fromRGB(0, 255, 255)
 Main.BorderSizePixel = 2
@@ -65,7 +65,7 @@ Main.Parent = ScreenGui
 local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1, 0, 0, 25)
 Title.BackgroundColor3 = Color3.fromRGB(0, 100, 100)
-Title.Text = "🎯 Rivals 終極輔助"
+Title.Text = "🎯 Rivals 終極輔助 (綠箱版)"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 14
 Title.Parent = Main
@@ -111,15 +111,35 @@ GodBtn.TextSize = 12
 GodBtn.ZIndex = 2
 GodBtn.Parent = Main
 
-local AimBtn = Instance.new("TextButton")
-AimBtn.Size = UDim2.new(0.9, 0, 0, 30)
-AimBtn.Position = UDim2.new(0.05, 0, 0, 170)
-AimBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-AimBtn.Text = "魔法子彈 (必中): 關閉"
-AimBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-AimBtn.TextSize = 12
-AimBtn.ZIndex = 2
-AimBtn.Parent = Main
+local InvisBtn = Instance.new("TextButton")
+InvisBtn.Size = UDim2.new(0.9, 0, 0, 30)
+InvisBtn.Position = UDim2.new(0.05, 0, 0, 170)
+InvisBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+InvisBtn.Text = "完全隱形: 關閉"
+InvisBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+InvisBtn.TextSize = 12
+InvisBtn.ZIndex = 2
+InvisBtn.Parent = Main
+
+local FastFireBtn = Instance.new("TextButton")
+FastFireBtn.Size = UDim2.new(0.9, 0, 0, 30)
+FastFireBtn.Position = UDim2.new(0.05, 0, 0, 205)
+FastFireBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+FastFireBtn.Text = "加速開槍: 關閉"
+FastFireBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+FastFireBtn.TextSize = 12
+FastFireBtn.ZIndex = 2
+FastFireBtn.Parent = Main
+
+local HitboxBtn = Instance.new("TextButton")
+HitboxBtn.Size = UDim2.new(0.9, 0, 0, 30)
+HitboxBtn.Position = UDim2.new(0.05, 0, 0, 240)
+HitboxBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+HitboxBtn.Text = "放大綠箱: 關閉"
+HitboxBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+HitboxBtn.TextSize = 12
+HitboxBtn.ZIndex = 2
+HitboxBtn.Parent = Main
 
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Size = UDim2.new(0, 20, 0, 20)
@@ -134,18 +154,15 @@ CloseBtn.Parent = Main
 CloseBtn.MouseButton1Click:Connect(function() Main.Visible = false; FloatBtn.Visible = true end)
 FloatBtn.MouseButton1Click:Connect(function() Main.Visible = true; FloatBtn.Visible = false end)
 
--- ==========================================
--- 2. 建立右上角獨立升降按鈕
--- ==========================================
+-- 右上角升降按鈕
 local UpBtn = Instance.new("TextButton")
 UpBtn.Size = UDim2.new(0, 50, 0, 50)
-UpBtn.Position = UDim2.new(1, -130, 0, 100) -- 固定在右上角
+UpBtn.Position = UDim2.new(1, -130, 0, 100)
 UpBtn.BackgroundColor3 = Color3.fromRGB(0, 200, 0)
 UpBtn.BackgroundTransparency = 0.3
 UpBtn.Text = "⬆️"
 UpBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 UpBtn.TextSize = 24
-UpBtn.Font = Enum.Font.SourceSansBold
 UpBtn.Visible = false
 UpBtn.ZIndex = 10
 UpBtn.Parent = ScreenGui
@@ -153,30 +170,30 @@ Instance.new("UICorner", UpBtn).CornerRadius = UDim.new(1, 0)
 
 local DownBtn = Instance.new("TextButton")
 DownBtn.Size = UDim2.new(0, 50, 0, 50)
-DownBtn.Position = UDim2.new(1, -60, 0, 100) -- 固定在右上角 (UpBtn 的右邊)
+DownBtn.Position = UDim2.new(1, -60, 0, 100)
 DownBtn.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
 DownBtn.BackgroundTransparency = 0.3
 DownBtn.Text = "⬇️"
 DownBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 DownBtn.TextSize = 24
-DownBtn.Font = Enum.Font.SourceSansBold
 DownBtn.Visible = false
 DownBtn.ZIndex = 10
 DownBtn.Parent = ScreenGui
 Instance.new("UICorner", DownBtn).CornerRadius = UDim.new(1, 0)
 
 -- ==========================================
--- 3. 核心變數與邏輯
+-- 3. 核心變數
 -- ==========================================
 local espEnabled = false
 local flyEnabled = false
 local followEnabled = false
 local godEnabled = false
-local silentAimEnabled = false
+local invisEnabled = false
+local fastFireEnabled = false
+local hitboxEnabled = false
 local isGoingUp = false
 local isGoingDown = false
-
--- 觸控判定 (改為判斷右上角的獨立按鈕)
+-- 觸控判定
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if not flyEnabled then return end
     if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -215,7 +232,6 @@ FlyBtn.MouseButton1Click:Connect(function()
     flyEnabled = not flyEnabled
     FlyBtn.Text = "飛天 (穿牆): " .. (flyEnabled and "開啟" or "關閉")
     FlyBtn.BackgroundColor3 = flyEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
-    -- 🚨 顯示/隱藏右上角的獨立按鈕
     UpBtn.Visible = flyEnabled
     DownBtn.Visible = flyEnabled
 
@@ -240,7 +256,6 @@ FlyBtn.MouseButton1Click:Connect(function()
             bv.Velocity = Vector3.new(0, 0, 0)
             bv.Parent = hrp
         else
-            -- 關閉飛天瞬間：射線找地板，直接落地
             local rayOrigin = hrp.Position
             local rayDirection = Vector3.new(0, -1000, 0)
             local raycastParams = RaycastParams.new()
@@ -248,18 +263,15 @@ FlyBtn.MouseButton1Click:Connect(function()
             raycastParams.FilterType = Enum.RaycastFilterType.Exclude
 
             local rayResult = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
-
             if rayResult then
                 hrp.CFrame = CFrame.new(rayResult.Position + Vector3.new(0, 3.5, 0))
             end
 
             if hrp:FindFirstChild("HackFly") then hrp.HackFly:Destroy() end
             humanoid.PlatformStand = false
-            
             for _, part in pairs(char:GetDescendants()) do
                 if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then part.CanCollide = true end
             end
-            
             task.delay(3, function()
                 if humanoid then
                     humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, true)
@@ -297,14 +309,41 @@ GodBtn.MouseButton1Click:Connect(function()
     end
 end)
 
-AimBtn.MouseButton1Click:Connect(function()
-    silentAimEnabled = not silentAimEnabled
-    AimBtn.Text = "魔法子彈 (必中): " .. (silentAimEnabled and "開啟" or "關閉")
-    AimBtn.BackgroundColor3 = silentAimEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
+InvisBtn.MouseButton1Click:Connect(function()
+    invisEnabled = not invisEnabled
+    InvisBtn.Text = "完全隱形: " .. (invisEnabled and "開啟" or "關閉")
+    InvisBtn.BackgroundColor3 = invisEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
+end)
+
+FastFireBtn.MouseButton1Click:Connect(function()
+    fastFireEnabled = not fastFireEnabled
+    FastFireBtn.Text = "加速開槍: " .. (fastFireEnabled and "開啟" or "關閉")
+    FastFireBtn.BackgroundColor3 = fastFireEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
+end)
+
+-- 📦 放大綠箱事件
+HitboxBtn.MouseButton1Click:Connect(function()
+    hitboxEnabled = not hitboxEnabled
+    HitboxBtn.Text = "放大綠箱: " .. (hitboxEnabled and "開啟" or "關閉")
+    HitboxBtn.BackgroundColor3 = hitboxEnabled and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(50, 50, 50)
+    
+    -- 如果關閉，恢復所有敵人的碰撞箱大小與顏色
+    if not hitboxEnabled then
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer and player.Character then
+                local hrp = player.Character:FindFirstChild("HumanoidRootPart")
+                if hrp and hrp:FindFirstChild("OriginalSize") then
+                    hrp.Size = hrp.OriginalSize.Value
+                    hrp.Transparency = 0
+                    hrp.Color = Color3.fromRGB(255, 255, 0) -- 恢復預設黃色
+                end
+            end
+        end
+    end
 end)
 
 -- ==========================================
--- 4. 魔法子彈 (穿牆必中)
+-- 4. 加速開槍底層攔截
 -- ==========================================
 pcall(function()
     local mt = getrawmetatable(game)
@@ -315,34 +354,13 @@ pcall(function()
         local method = getnamecallmethod()
         local args = {...}
 
-        if silentAimEnabled and (method == "Raycast" or method == "FindPartOnRay" or method == "FindPartOnRayWithIgnoreList") then
-            local closestTarget = nil
-            local shortestDistance = 350
-
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= LocalPlayer and player.Character then
-                    local head = player.Character:FindFirstChild("Head")
-                    local humanoid = player.Character:FindFirstChild("Humanoid")
-                    
-                    if head and humanoid and humanoid.Health > 0 then
-                        local dist = (Camera.CFrame.Position - head.Position).Magnitude
-                        if dist < shortestDistance then
-                            shortestDistance = dist
-                            closestTarget = head
-                        end
-                    end
-                end
-            end
-
-            if closestTarget then
-                if method == "Raycast" then
-                    local origin = args[1]
-                    local direction = args[2]
-                    args[2] = (closestTarget.Position - origin).Unit * direction.Magnitude
+        if fastFireEnabled then
+            if method == "Wait" or method == "wait" then
+                if args[1] and type(args[1]) == "number" and args[1] > 0.05 then
+                    args[1] = 0.05
                 end
             end
         end
-
         return oldNamecall(self, unpack(args))
     end)
     setreadonly(mt, true)
@@ -357,7 +375,24 @@ RunService.RenderStepped:Connect(function()
     local hrp = char:FindFirstChild("HumanoidRootPart")
     local humanoid = char:FindFirstChild("Humanoid")
 
-    -- 🛡️ 防掉圖與無敵
+    -- 隱形
+    if invisEnabled and char then
+        for _, part in pairs(char:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.LocalTransparencyModifier = 0 
+                part.Transparency = 1 
+            elseif part:IsA("Decal") or part:IsA("Texture") then
+                part.Transparency = 1
+            end
+        end
+        for _, acc in pairs(char:GetChildren()) do
+            if acc:IsA("Accessory") and acc:FindFirstChild("Handle") then
+                acc.Handle.Transparency = 1
+            end
+        end
+    end
+
+    -- 防掉圖與無敵
     if humanoid then
         if godEnabled or flyEnabled then
             if humanoid.Health < humanoid.MaxHealth then
@@ -369,7 +404,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- 🚀 飛天控制
+    -- 飛天控制
     if flyEnabled and hrp and humanoid then
         local bv = hrp:FindFirstChild("HackFly")
         if bv then
@@ -385,7 +420,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- 🚀 透視與敵人收集
+    -- 透視與敵人收集
     local activePlayers = {}
     local enemies = {}
 
@@ -402,6 +437,22 @@ RunService.RenderStepped:Connect(function()
 
                 if dist <= 350 then
                     table.insert(enemies, pRoot)
+                    
+                    -- 📦 放大綠箱邏輯
+                    if hitboxEnabled then
+                        if not pRoot:FindFirstChild("OriginalSize") then
+                            local val = Instance.new("Vector3Value")
+                            val.Name = "OriginalSize"
+                            val.Value = pRoot.Size
+                            val.Parent = pRoot
+                        end
+                        -- 放大成原本的 3 倍大，設定為半透明綠色
+                        pRoot.Size = pRoot.OriginalSize.Value * 3
+                        pRoot.Transparency = 0.5 -- 半透明
+                        pRoot.Color = Color3.fromRGB(0, 255, 0) -- 綠色
+                        pRoot.CanCollide = false
+                        pRoot.Material = Enum.Material.ForceField -- 加點特效看起來更帥
+                    end
 
                     if espEnabled then
                         local health = math.floor(pHumanoid.Health)
@@ -461,7 +512,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
 
-    -- 🚀 瞬移敵人身邊
+    -- 瞬移敵人身邊 (防抖動)
     if followEnabled and hrp then
         if #enemies > 0 and #enemies <= 5 then
             local closestRoot = nil
@@ -476,7 +527,7 @@ RunService.RenderStepped:Connect(function()
                 end
             end
 
-            if closestRoot then
+            if closestRoot and shortestDist > 4 then
                 local bv = hrp:FindFirstChild("FollowVelocity")
                 if not bv then
                     bv = Instance.new("BodyVelocity")
@@ -486,8 +537,10 @@ RunService.RenderStepped:Connect(function()
                 end
                 local direction = (closestRoot.Position - hrp.Position)
                 direction = Vector3.new(direction.X, 0, direction.Z).Unit
-                local targetVel = (direction * 200) + Vector3.new(0, 2, 0)
+                local targetVel = (direction * 150) + Vector3.new(0, 2, 0)
                 bv.Velocity = targetVel
+            else
+                if hrp:FindFirstChild("FollowVelocity") then hrp.FollowVelocity:Destroy() end
             end
         else
             if hrp:FindFirstChild("FollowVelocity") then hrp.FollowVelocity:Destroy() end
